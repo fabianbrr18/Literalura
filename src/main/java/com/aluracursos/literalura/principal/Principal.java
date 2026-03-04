@@ -37,16 +37,16 @@ public class Principal {
                         buscarLibroPorTitulo();
                         break;
                     case 2:
-                        System.out.println("Opción en construcción: Listar libros registrados");
+                        listarLibrosRegistrados();
                         break;
                     case 3:
-                        System.out.println("Opción en construcción: Listar autores registrados");
+                        listarAutoresRegistrados();
                         break;
                     case 4:
-                        System.out.println("Opción en construcción: Listar autores vivos");
+                        listarAutoresVivosEnAnio();
                         break;
                     case 5:
-                        System.out.println("Opción en construcción: Listar libros por idioma");
+                        listarLibrosPorIdioma();
                         break;
                     case 0:
                         System.out.println("Cerrando la aplicación...");
@@ -58,6 +58,52 @@ public class Principal {
                 System.out.println("Entrada inválida. Por favor, intente de nuevo.");
                 teclado.nextLine(); // Limpiar el buffer
             }
+        }
+    }
+
+    private void listarLibrosRegistrados() {
+        System.out.println("----- LIBROS REGISTRADOS -----");
+        libroRepository.findAll().forEach(System.out::println);
+        System.out.println("------------------------------");
+    }
+
+    private void listarAutoresRegistrados() {
+        System.out.println("----- AUTORES REGISTRADOS -----");
+        autorRepository.findAll().forEach(System.out::println);
+        System.out.println("-------------------------------");
+    }
+
+    private void listarAutoresVivosEnAnio() {
+        System.out.println("Ingrese el año que desea consultar:");
+        try {
+            var anio = teclado.nextInt();
+            teclado.nextLine(); // Limpiar el buffer
+
+            var autoresVivos = autorRepository.findAutoresVivosEnAnio(anio);
+            if (autoresVivos.isEmpty()) {
+                System.out.println("No se encontraron autores vivos en el año " + anio);
+            } else {
+                System.out.println("----- AUTORES VIVOS EN " + anio + " -----");
+                autoresVivos.forEach(System.out::println);
+                System.out.println("------------------------------------");
+            }
+        } catch (Exception e) {
+            System.out.println("Entrada inválida.");
+            teclado.nextLine();
+        }
+    }
+
+    private void listarLibrosPorIdioma() {
+        System.out.println("Ingrese el idioma para buscar los libros (ejemplo: es, en, fr, pt):");
+        var idioma = teclado.nextLine();
+        var librosPorIdioma = libroRepository.findByIdioma(idioma);
+
+        if (librosPorIdioma.isEmpty()) {
+            System.out.println("No se encontraron libros registrados en ese idioma.");
+        } else {
+            System.out.println("----- LIBROS EN EL IDIOMA '" + idioma + "' -----");
+            librosPorIdioma.forEach(System.out::println);
+            System.out.println("-------------------------------------------");
         }
     }
 
