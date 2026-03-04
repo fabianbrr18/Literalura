@@ -104,7 +104,7 @@ spring.datasource.password=TU_PASSWORD
 </p>
 
 <p align="center">
-  <a href="www.linkedin.com/in/fabian-felipe-cifuentes" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
+  <a href="https://linkedin.com/in/fabian-felipe-cifuentes" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
   <a href="https://github.com/fabianbrr18" target="_blank"><img src="https://img.shields.io/badge/-Github-%23181717?style=for-the-badge&logo=github&logoColor=white" alt="Github"></a>
 </p>
 
