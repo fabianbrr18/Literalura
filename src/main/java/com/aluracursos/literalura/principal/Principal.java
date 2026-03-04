@@ -1,7 +1,11 @@
 package com.aluracursos.literalura.principal;
 
+import com.aluracursos.literalura.model.Autor;
 import com.aluracursos.literalura.model.DatosLibro;
 import com.aluracursos.literalura.model.DatosResultados;
+import com.aluracursos.literalura.model.Libro;
+import com.aluracursos.literalura.repository.AutorRepository;
+import com.aluracursos.literalura.repository.LibroRepository;
 import com.aluracursos.literalura.service.ConsumoAPI;
 import com.aluracursos.literalura.service.ConvierteDatos;
 
@@ -13,6 +17,14 @@ public class Principal {
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private ConvierteDatos conversor = new ConvierteDatos();
     private final String URL_BASE = "https://gutendex.com/books/";
+
+    private AutorRepository autorRepository;
+    private LibroRepository libroRepository;
+
+    public Principal(AutorRepository autorRepository, LibroRepository libroRepository) {
+        this.autorRepository = autorRepository;
+        this.libroRepository = libroRepository;
+    }
 
     public void muestraElMenu() {
         var opcion = -1;
@@ -124,11 +136,23 @@ public class Principal {
             System.out.println("Libro encontrado:");
             System.out.println("Título: " + datos.titulo());
 
+            Libro libro = new Libro(datos);
+            Autor autor = null;
+
             if (datos.autor() != null && !datos.autor().isEmpty()) {
-                var autor = datos.autor().get(0);
-                System.out.println("Autor: " + autor.nombre() +
-                        " (Nacimiento: " + autor.fechaDeNacimiento() +
-                        ", Fallecimiento: " + autor.fechaDeFallecimiento() + ")");
+                var datosAutor = datos.autor().get(0);
+                System.out.println("Autor: " + datosAutor.nombre() +
+                        " (Nacimiento: " + datosAutor.fechaDeNacimiento() +
+                        ", Fallecimiento: " + datosAutor.fechaDeFallecimiento() + ")");
+
+                // Buscar si el autor ya existe en la base de datos
+                Optional<Autor> autorExistente = autorRepository.findByNombre(datosAutor.nombre());
+                if (autorExistente.isPresent()) {
+                    autor = autorExistente.get();
+                } else {
+                    autor = new Autor(datosAutor);
+                    autorRepository.save(autor);
+                }
             } else {
                 System.out.println("Autor: Desconocido");
             }
@@ -138,6 +162,18 @@ public class Principal {
             }
 
             System.out.println("Número de descargas: " + datos.numeroDeDescargas());
+
+            // Relacionar y guardar libro
+            if (autor != null) {
+                libro.setAutor(autor);
+            }
+            try {
+                libroRepository.save(libro);
+                System.out.println("Libro guardado en la base de datos con éxito!");
+            } catch (Exception e) {
+                System.out.println("Ese libro ya se encuentra registrado o hubo un error al guardar.");
+            }
+
             System.out.println("----------------------------------------");
         } else {
             System.out.println("Libro no encontrado.");
