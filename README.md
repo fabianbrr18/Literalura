@@ -15,7 +15,7 @@
 <p align="center">
   <a href="#-descripción">Descripción</a> • 
   <a href="#-características">Características</a> • 
-  <a href="#-tecnologías">Tecnologías</a> • 
+  <a href="#%EF%B8%8F-tecnologías">Tecnologías</a> • 
   <a href="#-demostración">Demostración</a> • 
   <a href="#-estructura-del-código">Estructura</a> • 
   <a href="#-instalación-y-ejecución">Instalación</a> • 
